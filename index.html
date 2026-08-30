@@ -135,47 +135,36 @@
             font-style: italic;
         }
 
-        /* Tombol Memories dengan Efek Emas Menyala & Kedap-kedip Pelan (Pulse) */
+        /* Tombol Memories: Tenang, Redup, Tanpa Kedap-kedip */
         #secret-btn {
             position: absolute;
             bottom: 30px;
             right: 30px;
-            padding: 11px 22px;
-            font-size: 0.95rem;
+            padding: 9px 18px;
+            font-size: 0.85rem;
             font-family: inherit;
-            letter-spacing: 2px;
-            color: var(--text-gold);
-            background: rgba(212, 175, 55, 0.05);
-            border: 1.5px solid var(--text-gold);
+            letter-spacing: 1.5px;
+            color: rgba(212, 175, 55, 0.65); /* Warna emas lebih redup */
+            background: rgba(212, 175, 55, 0.02);
+            border: 1px solid rgba(212, 175, 55, 0.3); /* Border lebih tipis & redup */
             border-radius: 6px;
             cursor: pointer;
             opacity: 0;
             z-index: 25;
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
-            animation: none; /* Diatur via JS saat muncul */
+            box-shadow: 0 0 5px rgba(212, 175, 55, 0.05); /* Cahaya sangat minim */
+            transition: all 0.3s ease;
         }
 
-        /* Animasi kedap-kedip pelan (pulsing glow) warna emas */
-        @keyframes goldPulse {
-            0% { 
-                opacity: 0.6; 
-                box-shadow: 0 0 5px rgba(212, 175, 55, 0.2); 
-            }
-            50% { 
-                opacity: 1; 
-                box-shadow: 0 0 20px rgba(212, 175, 55, 0.6), inset 0 0 10px rgba(212, 175, 55, 0.2); 
-            }
-            100% { 
-                opacity: 0.6; 
-                box-shadow: 0 0 5px rgba(212, 175, 55, 0.2); 
-            }
+        @keyframes fadeInButton {
+            to { opacity: 0.85; /* Tampil dengan opacity sedikit diturunkan agar tidak mencolok */ }
         }
 
         #secret-btn:hover {
-            background: var(--text-gold);
-            color: var(--bg-color);
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.8);
-            transform: scale(1.05);
+            color: var(--text-gold);
+            border-color: var(--text-gold);
+            background: rgba(212, 175, 55, 0.1);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+            opacity: 1 !important;
         }
 
         .slide-container {
@@ -232,8 +221,8 @@
             #secret-btn {
                 bottom: 20px;
                 right: 20px;
-                font-size: 0.85rem;
-                padding: 9px 18px;
+                font-size: 0.75rem;
+                padding: 7px 14px;
             }
             .message-content {
                 margin-bottom: 50px;
@@ -374,8 +363,8 @@
                 void mainScreen.offsetWidth; 
                 mainScreen.style.opacity = '1';
                 
-                // Memicu tombol muncul sekaligus menjalankan animasi kedap-kedip emas (goldPulse)
-                secretBtn.style.animation = "goldPulse 2.5s infinite ease-in-out";
+                // Muncul tenang tanpa kedap-kedip
+                secretBtn.style.animation = "fadeInButton 1.5s ease forwards 1s";
 
                 if (!isTyping) {
                     isTyping = true;
