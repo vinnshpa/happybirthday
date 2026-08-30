@@ -135,10 +135,41 @@
             font-style: italic;
         }
 
-        #secret-btn {
+        /* Container untuk Tombol Memories dan Panah di Pojok Kanan Bawah */
+        .corner-hint-container {
             position: absolute;
             bottom: 30px;
             right: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            opacity: 0; /* Mulai tersembunyi untuk animasi */
+            z-index: 25;
+        }
+
+        @keyframes fadeInContainer {
+            to { opacity: 1; }
+        }
+
+        /* Desain Panah Kurva yang Elegan */
+        .curved-arrow {
+            font-size: 1.6rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: -5px;
+            margin-right: 12px;
+            line-height: 1;
+            user-select: none;
+            transform: rotate(15deg);
+            animation: subtlePulse 2s infinite ease-in-out;
+        }
+
+        @keyframes subtlePulse {
+            0%, 100% { transform: translateY(0) rotate(15deg); opacity: 0.4; }
+            50% { transform: translateY(4px) rotate(15deg); opacity: 0.8; }
+        }
+
+        /* Tombol Memories */
+        #secret-btn {
             padding: 8px 16px;
             font-size: 0.85rem;
             font-family: inherit;
@@ -149,18 +180,12 @@
             border-radius: 4px;
             cursor: pointer;
             transition: all 0.3s ease;
-            opacity: 0;
-            z-index: 25;
         }
 
         #secret-btn:hover {
             color: var(--text-light);
             border-color: var(--text-light);
             background: rgba(255, 255, 255, 0.1);
-        }
-
-        @keyframes fadeInButton {
-            to { opacity: 1; }
         }
 
         .slide-container {
@@ -214,11 +239,17 @@
         }
 
         @media (max-width: 600px) {
-            #secret-btn {
+            .corner-hint-container {
                 bottom: 20px;
                 right: 20px;
+            }
+            #secret-btn {
                 font-size: 0.75rem;
                 padding: 6px 12px;
+            }
+            .curved-arrow {
+                font-size: 1.3rem;
+                margin-right: 8px;
             }
             .message-content {
                 margin-bottom: 50px;
@@ -236,7 +267,11 @@
 
     <div id="main-screen" class="screen">
         <div id="message" class="message-content"></div>
-        <button id="secret-btn">memories?</button>
+        
+        <div id="cornerHint" class="corner-hint-container">
+            <div class="curved-arrow">↳</div>
+            <button id="secret-btn">memories?</button>
+        </div>
     </div>
 
     <div id="memory-screen" class="screen">
@@ -283,7 +318,7 @@
             </div>
             <div class="slide">
                 <img src="media/foto12.jpg" alt="Kenangan 12">
-                <div class="slide-text">Selamat ulang tahun, Sherlin. Terima kasih pernah menjadi salah satu bab terbaik dalam perjalananku.</div>
+                <div class="slide-text">Selamat ulang tahun, Sherlin. Terima kasih pernah pernah menjadi salah satu bab terbaik dalam perjalananku.</div>
             </div>
         </div>
     </div>
@@ -303,7 +338,7 @@
         const mainScreen = document.getElementById('main-screen');
         const memoryScreen = document.getElementById('memory-screen');
         const messageDiv = document.getElementById('message');
-        const secretBtn = document.getElementById('secret-btn');
+        const cornerHint = document.getElementById('cornerHint');
         const particlesContainer = document.getElementById('particles-container');
         
         const bgMusic = document.getElementById('bgMusic');
@@ -325,7 +360,6 @@
                 
                 particle.style.left = Math.random() * 100 + 'vw';
                 particle.style.animationDuration = Math.random() * 15 + 10 + 's'; 
-                
                 particle.style.animationDelay = '-' + (Math.random() * 25) + 's';
                 
                 particlesContainer.appendChild(particle);
@@ -360,7 +394,8 @@
                 void mainScreen.offsetWidth; 
                 mainScreen.style.opacity = '1';
                 
-                secretBtn.style.animation = "fadeInButton 1.5s ease forwards 1s";
+                // Memicu animasi muncul untuk panah dan tombol memories secara bersamaan
+                cornerHint.style.animation = "fadeInContainer 1.5s ease forwards 1s";
 
                 if (!isTyping) {
                     isTyping = true;
@@ -369,7 +404,7 @@
             }, 1500); 
         });
 
-        secretBtn.addEventListener('click', () => {
+        document.getElementById('secret-btn').addEventListener('click', () => {
             particlesContainer.classList.add('memory-mode');
 
             bgMusic.pause();
