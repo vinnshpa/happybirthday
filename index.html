@@ -135,57 +135,47 @@
             font-style: italic;
         }
 
-        /* Container untuk Tombol Memories dan Panah di Pojok Kanan Bawah */
-        .corner-hint-container {
+        /* Tombol Memories dengan Efek Emas Menyala & Kedap-kedip Pelan (Pulse) */
+        #secret-btn {
             position: absolute;
             bottom: 30px;
             right: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            opacity: 0; /* Mulai tersembunyi untuk animasi */
-            z-index: 25;
-        }
-
-        @keyframes fadeInContainer {
-            to { opacity: 1; }
-        }
-
-        /* Desain Panah Kurva yang Elegan */
-        .curved-arrow {
-            font-size: 1.6rem;
-            color: rgba(255, 255, 255, 0.4);
-            margin-bottom: -5px;
-            margin-right: 12px;
-            line-height: 1;
-            user-select: none;
-            transform: rotate(15deg);
-            animation: subtlePulse 2s infinite ease-in-out;
-        }
-
-        @keyframes subtlePulse {
-            0%, 100% { transform: translateY(0) rotate(15deg); opacity: 0.4; }
-            50% { transform: translateY(4px) rotate(15deg); opacity: 0.8; }
-        }
-
-        /* Tombol Memories */
-        #secret-btn {
-            padding: 8px 16px;
-            font-size: 0.85rem;
+            padding: 11px 22px;
+            font-size: 0.95rem;
             font-family: inherit;
-            letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.4);
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
+            letter-spacing: 2px;
+            color: var(--text-gold);
+            background: rgba(212, 175, 55, 0.05);
+            border: 1.5px solid var(--text-gold);
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            opacity: 0;
+            z-index: 25;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+            animation: none; /* Diatur via JS saat muncul */
+        }
+
+        /* Animasi kedap-kedip pelan (pulsing glow) warna emas */
+        @keyframes goldPulse {
+            0% { 
+                opacity: 0.6; 
+                box-shadow: 0 0 5px rgba(212, 175, 55, 0.2); 
+            }
+            50% { 
+                opacity: 1; 
+                box-shadow: 0 0 20px rgba(212, 175, 55, 0.6), inset 0 0 10px rgba(212, 175, 55, 0.2); 
+            }
+            100% { 
+                opacity: 0.6; 
+                box-shadow: 0 0 5px rgba(212, 175, 55, 0.2); 
+            }
         }
 
         #secret-btn:hover {
-            color: var(--text-light);
-            border-color: var(--text-light);
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--text-gold);
+            color: var(--bg-color);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.8);
+            transform: scale(1.05);
         }
 
         .slide-container {
@@ -239,17 +229,11 @@
         }
 
         @media (max-width: 600px) {
-            .corner-hint-container {
+            #secret-btn {
                 bottom: 20px;
                 right: 20px;
-            }
-            #secret-btn {
-                font-size: 0.75rem;
-                padding: 6px 12px;
-            }
-            .curved-arrow {
-                font-size: 1.3rem;
-                margin-right: 8px;
+                font-size: 0.85rem;
+                padding: 9px 18px;
             }
             .message-content {
                 margin-bottom: 50px;
@@ -267,11 +251,7 @@
 
     <div id="main-screen" class="screen">
         <div id="message" class="message-content"></div>
-        
-        <div id="cornerHint" class="corner-hint-container">
-            <div class="curved-arrow">↳</div>
-            <button id="secret-btn">memories?</button>
-        </div>
+        <button id="secret-btn">memories?</button>
     </div>
 
     <div id="memory-screen" class="screen">
@@ -318,7 +298,7 @@
             </div>
             <div class="slide">
                 <img src="media/foto12.jpg" alt="Kenangan 12">
-                <div class="slide-text">Selamat ulang tahun, Sherlin. Terima kasih pernah pernah menjadi salah satu bab terbaik dalam perjalananku.</div>
+                <div class="slide-text">Selamat ulang tahun, Sherlin. Terima kasih pernah menjadi salah satu bab terbaik dalam perjalananku.</div>
             </div>
         </div>
     </div>
@@ -338,7 +318,7 @@
         const mainScreen = document.getElementById('main-screen');
         const memoryScreen = document.getElementById('memory-screen');
         const messageDiv = document.getElementById('message');
-        const cornerHint = document.getElementById('cornerHint');
+        const secretBtn = document.getElementById('secret-btn');
         const particlesContainer = document.getElementById('particles-container');
         
         const bgMusic = document.getElementById('bgMusic');
@@ -394,8 +374,8 @@
                 void mainScreen.offsetWidth; 
                 mainScreen.style.opacity = '1';
                 
-                // Memicu animasi muncul untuk panah dan tombol memories secara bersamaan
-                cornerHint.style.animation = "fadeInContainer 1.5s ease forwards 1s";
+                // Memicu tombol muncul sekaligus menjalankan animasi kedap-kedip emas (goldPulse)
+                secretBtn.style.animation = "goldPulse 2.5s infinite ease-in-out";
 
                 if (!isTyping) {
                     isTyping = true;
@@ -404,7 +384,7 @@
             }, 1500); 
         });
 
-        document.getElementById('secret-btn').addEventListener('click', () => {
+        secretBtn.addEventListener('click', () => {
             particlesContainer.classList.add('memory-mode');
 
             bgMusic.pause();
