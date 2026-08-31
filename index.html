@@ -141,12 +141,12 @@
         }
 
         .message-content {
-            font-size: clamp(1rem, 4vw, 1.3rem);
+            font-size: clamp(0.9rem, 3.2vw, 1.15rem);
             line-height: 1.8;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             text-align: center;
             max-width: 90%;
-            width: 600px;
+            width: 650px;
             position: relative;
             z-index: 16;
             color: var(--text-light);
@@ -158,6 +158,32 @@
             font-style: italic;
         }
 
+        .signature {
+            display: block;
+            margin-top: 25px;
+            color: var(--text-gold);
+            font-style: italic;
+            font-size: 1.1rem;
+            letter-spacing: 1.5px;
+            opacity: 0.9;
+        }
+
+        /* Tombol Memories dengan Animasi Glow Abu-Abu Berdenyut Otomatis */
+        @keyframes pulseGrayGlow {
+            0% {
+                box-shadow: 0 0 5px rgba(200, 200, 200, 0.15);
+                border-color: rgba(200, 200, 200, 0.25);
+            }
+            50% {
+                box-shadow: 0 0 16px rgba(220, 220, 220, 0.45);
+                border-color: rgba(220, 220, 220, 0.6);
+            }
+            100% {
+                box-shadow: 0 0 5px rgba(200, 200, 200, 0.15);
+                border-color: rgba(200, 200, 200, 0.25);
+            }
+        }
+
         #secret-btn {
             position: absolute;
             bottom: 30px;
@@ -166,30 +192,28 @@
             font-size: 0.85rem;
             font-family: inherit;
             letter-spacing: 1.5px;
-            color: rgba(212, 175, 55, 0.65);
-            background: rgba(212, 175, 55, 0.02);
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: #d0d0d0;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(200, 200, 200, 0.3);
             border-radius: 6px;
             cursor: pointer;
             opacity: 0;
             z-index: 25;
-            box-shadow: 0 0 5px rgba(212, 175, 55, 0.05);
+            animation: fadeInButton 1.5s ease forwards 1s, pulseGrayGlow 3s infinite ease-in-out;
             transition: all 0.3s ease;
         }
 
         @keyframes fadeInButton {
-            to { opacity: 0.85; }
+            to { opacity: 0.95; }
         }
 
         #secret-btn:hover {
-            color: var(--text-gold);
-            border-color: var(--text-gold);
-            background: rgba(212, 175, 55, 0.1);
-            box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
-            opacity: 1 !important;
+            color: #ffffff;
+            border-color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
         }
 
-        /* Container Logo Simbol (Salib - Teks - Bulan Sabit) */
         .symbols-header {
             display: flex;
             align-items: center;
@@ -267,10 +291,10 @@
 
         @media (max-width: 600px) {
             #secret-btn {
-                bottom: 20px;
-                right: 20px;
-                font-size: 0.75rem;
-                padding: 7px 14px;
+                bottom: 25px;
+                right: 25px;
+                font-size: 0.8rem;
+                padding: 8px 16px;
             }
             .message-content {
                 margin-bottom: 50px;
@@ -299,11 +323,10 @@
 
     <div id="confirm-screen" class="screen">
         <div id="confirmText" class="confirm-text">Yakin mau liat?</div>
-        <button id="confirmBtn" class="btn-confirm">Iya</button>
+        <button id="confirmBtn" class="btn-confirm">yakin</button>
     </div>
 
     <div id="memory-screen" class="screen">
-        <!-- Logo Simbol Salib - Memories - Bulan Sabit di atas Slideshow -->
         <div class="symbols-header">
             <span class="symbol-icon">✝</span>
             <span class="symbol-text">MEMORIES</span>
@@ -311,57 +334,46 @@
         </div>
 
         <div class="slide-container" id="slideshow">
-            <!-- Foto 1 -->
             <div class="slide active">
                 <img src="media/foto1.jpg" alt="Kenangan 1">
                 <div class="slide-text">Kita tidak selalu dipertemukan untuk bersama, terkadang hanya untuk saling mengubah.</div>
             </div>
-            <!-- Foto 2 -->
             <div class="slide">
                 <img src="media/foto2.jpg" alt="Kenangan 2">
                 <div class="slide-text">Ada orang yang hadir untuk menetap, ada pula yang hadir untuk mengajarkan cara melepaskan.</div>
             </div>
-            <!-- Foto 4 -->
             <div class="slide">
                 <img src="media/foto4.jpg" alt="Kenangan 4">
                 <div class="slide-text">Yang singkat belum tentu sia-sia, dan yang berakhir bukan berarti tidak berarti.</div>
             </div>
-            <!-- Foto 5 -->
             <div class="slide">
                 <img src="media/foto5.jpg" alt="Kenangan 5">
                 <div class="slide-text">Mungkin kita bukan akhir dari satu sama lain, tapi kita pernah menjadi bagian penting dalam perjalanan masing-masing.</div>
             </div>
-            <!-- Foto 6 -->
             <div class="slide">
                 <img src="media/foto6.jpg" alt="Kenangan 6">
                 <div class="slide-text">Beberapa pertemuan memang indah bukan karena akhirnya, tapi karena pernah terjadi.</div>
             </div>
-            <!-- Foto 7 -->
             <div class="slide">
                 <img src="media/foto7.jpg" alt="Kenangan 7">
                 <div class="slide-text">Kita pernah begitu dekat, hingga akhirnya menjadi dua orang yang hanya saling mengenang.</div>
             </div>
-            <!-- Foto 8 -->
             <div class="slide">
                 <img src="media/foto8.jpg" alt="Kenangan 8">
                 <div class="slide-text">Tidak semua cerita harus berakhir bahagia, beberapa cukup berakhir dengan sebuah pelajaran.</div>
             </div>
-            <!-- Foto 9 -->
             <div class="slide">
                 <img src="media/foto9.jpg" alt="Kenangan 9">
                 <div class="slide-text">Pada akhirnya, yang tersisa dari sebuah pertemuan bukan hanya kenangan, tetapi juga versi diri kita yang telah berubah.</div>
             </div>
-            <!-- Foto 10 -->
             <div class="slide">
                 <img src="media/foto10.jpg" alt="Kenangan 10">
                 <div class="slide-text">Kita bertemu pada waktu yang tepat, hanya saja mungkin bukan untuk waktu yang lama.</div>
             </div>
-            <!-- Foto 11 -->
             <div class="slide">
                 <img src="media/foto11.jpg" alt="Kenangan 11">
                 <div class="slide-text">Ada perpisahan yang menyakitkan bukan karena kehilangan seseorang, tetapi karena kehilangan masa depan yang pernah kita bayangkan.</div>
             </div>
-            <!-- Foto 12 -->
             <div class="slide">
                 <img src="media/foto12.jpg" alt="Kenangan 12">
                 <div class="slide-text">Barangkali kita memang ditakdirkan untuk bertemu, bukan untuk memiliki, melainkan untuk saling belajar tentang arti kehilangan.</div>
@@ -377,7 +389,7 @@
     </audio>
 
     <script>
-        const textMessage = `Selamat Ulang Tahun, Sherlin...\n\nDi hari bertambahnya usiamu ini, aku hanya ingin menitipkan doa yang tulus. Semoga kebaikan, ketenangan jiwa, dan kebahagiaan selalu menyertai setiap langkah perjalanan barumu.\n\nTerima kasih pernah menjadi bab terindah dan paling berharga dalam hidupku. Meski lembaran kita kini telah berbeda, rasa hormat dan hangat itu tidak akan pernah pudar.\n\nSemoga hari ini dan hari-hari ke depan membawa banyak hal baik untukmu. Selamat bertambah usia.`;
+        const textMessage = `Selamat Ulang Tahun, Sherlyn...\n\nDi hari bertambahnya usiamu ini, aku hanya ingin sejenak meluangkan waktu untuk menitipkan doa yang tulus. Semoga kebaikan, ketenangan jiwa, kesehatan, dan kebahagiaan yang utuh selalu menyertai setiap langkah perjalanan barumu.\n\nTerima kasih pernah menjadi bagian terindah dalam hidupku, pernah membersamai hari-hari berat dengan tawa, serta mengajarkan banyak hal tentang arti kedewasaan. Walau lembaran kita sudah tidak lagi sama, rasa hormat, apresiasi, dan kenangan baik itu akan selalu tersimpan rapi.\n\nSemoga di usiamu yang baru ini, kamu senantiasa dikelilingi ketenangan jiwa, kesehatan, dan kebahagiaan yang utuh. Selamat bertambah usia.`;
         
         const openBtn = document.getElementById('openBtn');
         const introScreen = document.getElementById('intro-screen');
@@ -426,10 +438,12 @@
                     messageDiv.innerHTML += textMessage.charAt(i);
                 }
                 i++;
-                let randomSpeed = Math.floor(Math.random() * (50 - 20 + 1)) + 20; 
+                let randomSpeed = Math.floor(Math.random() * (40 - 15 + 1)) + 15; 
                 setTimeout(typeWriter, randomSpeed);
             } else {
-                messageDiv.innerHTML = messageDiv.innerHTML.replace('Sherlin', '<span class="highlight">Sherlin</span>');
+                let formattedText = messageDiv.innerHTML.replace('Sherlin', '<span class="highlight">Sherlin</span>');
+                formattedText = formattedText.replace('~Calvin', '<span class="signature">~Calvin</span>');
+                messageDiv.innerHTML = formattedText;
             }
         }
 
@@ -443,8 +457,6 @@
                 
                 void mainScreen.offsetWidth; 
                 mainScreen.style.opacity = '1';
-                
-                secretBtn.style.animation = "fadeInButton 1.5s ease forwards 1s";
 
                 if (!isTyping) {
                     isTyping = true;
@@ -473,19 +485,18 @@
                 setTimeout(() => {
                     confirmText.innerText = "Kalau lagi jaga hati, mending jangan...";
                     confirmText.style.opacity = '1';
+                    confirmBtn.innerText = "Yakin kok"; // Mengubah teks tombol menjadi "Yakin"
                     confirmStep = 2;
                 }, 500);
             } else if (confirmStep === 2) {
                 confirmText.style.opacity = '0';
                 confirmBtn.style.opacity = '0';
 
-                // Tahap 1 teks: "Baiklah..."
                 setTimeout(() => {
                     confirmText.innerText = "Baiklah...";
                     confirmText.style.opacity = '1';
                 }, 500);
 
-                // Tahap 2 teks: "welcome to our memories"
                 setTimeout(() => {
                     confirmText.style.opacity = '0';
                     setTimeout(() => {
@@ -494,7 +505,6 @@
                     }, 600);
                 }, 2000);
 
-                // Transisi akhir masuk ke slideshow
                 setTimeout(() => {
                     particlesContainer.classList.add('memory-mode');
                     memoryMusic.play().catch(e => console.log("Audio memori dicegah."));
