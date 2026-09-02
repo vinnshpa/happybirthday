@@ -86,6 +86,7 @@
             background: radial-gradient(circle at center, #1a0505 0%, var(--bg-color) 80%);
         }
 
+        /* Perbaikan Layout Screen Konfirmasi agar Benar-Benar Center di HP */
         #confirm-screen {
             z-index: 25;
             opacity: 0;
@@ -96,9 +97,9 @@
             align-items: center;
             text-align: center;
             padding: 20px;
+            box-sizing: border-box;
         }
 
-        /* Perbaikan Layout Screen Memories agar Pas di Tengah Secara Sempurna di HP */
         #memory-screen {
             z-index: 30; 
             opacity: 0;
@@ -135,15 +136,27 @@
             box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
         }
 
+        .confirm-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            max-width: 90%;
+            width: 450px;
+            margin: 0 auto;
+        }
+
         .confirm-text {
-            font-size: clamp(1.1rem, 3.5vw, 1.5rem);
+            font-size: clamp(1.1rem, 3.5vw, 1.4rem);
             color: var(--text-light);
             margin-bottom: 25px;
             letter-spacing: 1px;
             font-style: italic;
-            max-width: 80%;
             line-height: 1.6;
-            transition: opacity 0.8s ease;
+            transition: opacity 0.6s ease;
+            text-align: center;
+            width: 100%;
         }
 
         .message-content {
@@ -233,6 +246,29 @@
             border-color: #ffffff;
             background: rgba(255, 255, 255, 0.1);
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+        }
+
+        #home-btn {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            padding: 6px 14px;
+            font-size: 0.75rem;
+            font-family: inherit;
+            letter-spacing: 1.5px;
+            color: #b0b0b0;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(200, 200, 200, 0.2);
+            border-radius: 4px;
+            cursor: pointer;
+            z-index: 40;
+            transition: all 0.3s ease;
+        }
+
+        #home-btn:hover {
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .symbols-header {
@@ -347,6 +383,12 @@
                 font-size: 0.8rem;
                 padding: 8px 16px;
             }
+            #home-btn {
+                top: 20px;
+                right: 20px;
+                font-size: 0.7rem;
+                padding: 5px 10px;
+            }
             .message-content {
                 margin-bottom: 45px;
                 max-height: 68vh;
@@ -374,11 +416,15 @@
     </div>
 
     <div id="confirm-screen" class="screen">
-        <div id="confirmText" class="confirm-text">Yakin mau liat?</div>
-        <button id="confirmBtn" class="btn-confirm">yakin</button>
+        <div class="confirm-box">
+            <div id="confirmText" class="confirm-text">Mau lihat?</div>
+            <button id="confirmBtn" class="btn-confirm">Iya</button>
+        </div>
     </div>
 
     <div id="memory-screen" class="screen">
+        <button id="home-btn">Kembali</button>
+        
         <div class="symbols-header">
             <span class="symbol-icon">✝</span>
             <span class="symbol-text">MEMORIES</span>
@@ -456,6 +502,7 @@
         const memoryScreen = document.getElementById('memory-screen');
         const messageDiv = document.getElementById('message');
         const secretBtn = document.getElementById('secret-btn');
+        const homeBtn = document.getElementById('home-btn');
         const particlesContainer = document.getElementById('particles-container');
         
         const bgMusic = document.getElementById('bgMusic');
@@ -464,6 +511,7 @@
         let i = 0;
         let isTyping = false;
         let confirmStep = 1;
+        let slideshowInterval = null;
 
         function createParticles() {
             const particleCount = window.innerWidth < 600 ? 40 : 70; 
@@ -526,9 +574,6 @@
         });
 
         secretBtn.addEventListener('click', () => {
-            bgMusic.pause();
-            bgMusic.currentTime = 0; 
-
             mainScreen.style.opacity = '0';
             setTimeout(() => {
                 mainScreen.style.display = 'none';
@@ -540,58 +585,100 @@
         });
 
         confirmBtn.addEventListener('click', () => {
-            if (confirmStep === 1) {
-                confirmText.style.opacity = '0';
-                setTimeout(() => {
-                    confirmText.innerText = "Kalau lagi jaga hati, mending jangan...";
-                    confirmText.style.opacity = '1';
-                    confirmBtn.innerText = "Yakin kok";
+            confirmText.style.opacity = '0';
+            
+            setTimeout(() => {
+                if (confirmStep === 1) {
+                    confirmText.innerText = "Serius?";
+                    confirmBtn.innerText = "Serius lah";
                     confirmStep = 2;
-                }, 500);
-            } else if (confirmStep === 2) {
-                confirmText.style.opacity = '0';
-                confirmBtn.style.opacity = '0';
-
-                setTimeout(() => {
-                    confirmText.innerText = "Baiklah...";
-                    confirmText.style.opacity = '1';
-                }, 500);
-
-                setTimeout(() => {
-                    confirmText.style.opacity = '0';
-                    setTimeout(() => {
-                        confirmText.innerText = "welcome to our memories";
-                        confirmText.style.opacity = '1';
-                    }, 600);
-                }, 2000);
-
-                setTimeout(() => {
-                    particlesContainer.classList.add('memory-mode');
+                } else if (confirmStep === 2) {
+                    confirmText.innerText = "Padahal bukan apa-apa...";
+                    confirmBtn.innerText = "penasaran";
+                    confirmStep = 3;
+                } else if (confirmStep === 3) {
+                    confirmText.innerText = "Kalau lagi jaga hati seseorang, mending jangan lihat...";
+                    confirmBtn.innerText = "Tetap mau lihat";
+                    confirmStep = 4;
+                } else if (confirmStep === 4) {
+                    // TEPAT SAAT TOMBOL "Tetap mau lihat" DIKLIK (Pertanyaan ke-4), GANTI LAGU DI SINI
+                    bgMusic.pause();
+                    bgMusic.currentTime = 0;
                     memoryMusic.play().catch(e => console.log("Audio memori dicegah."));
 
-                    confirmScreen.style.opacity = '0';
+                    confirmText.innerText = "Maksa banget";
+                    confirmBtn.innerText = "Terserah aku";
+                    confirmStep = 5;
+                } else if (confirmStep === 5) {
+                    // Sembunyikan tombol dan tampilkan kata "Yaudah deh..."
+                    confirmBtn.style.opacity = '0';
+                    confirmText.innerText = "Yaudah deh...";
+                    confirmText.style.opacity = '1';
+
+                    // Setelah "Yaudah deh...", ganti ke kalimat akhir dan pindah halaman
                     setTimeout(() => {
-                        confirmScreen.style.display = 'none';
-                        memoryScreen.style.display = 'flex';
-                        
-                        void memoryScreen.offsetWidth;
-                        memoryScreen.style.opacity = '1';
-                        startSlideshow();
-                    }, 1500);
-                }, 4200);
-            }
+                        confirmText.style.opacity = '0';
+                        setTimeout(() => {
+                            confirmText.innerText = "welcome to our memories";
+                            confirmText.style.opacity = '1';
+                        }, 600);
+                    }, 2000);
+
+                    setTimeout(() => {
+                        particlesContainer.classList.add('memory-mode');
+
+                        confirmScreen.style.opacity = '0';
+                        setTimeout(() => {
+                            confirmScreen.style.display = 'none';
+                            memoryScreen.style.display = 'flex';
+                            
+                            void memoryScreen.offsetWidth;
+                            memoryScreen.style.opacity = '1';
+                            startSlideshow();
+                        }, 1500);
+                    }, 4200);
+                    
+                    return;
+                }
+                confirmText.style.opacity = '1';
+            }, 400);
         });
 
         function startSlideshow() {
             const slides = document.querySelectorAll('.slide');
             let currentSlide = 0;
 
-            setInterval(() => {
+            if (slideshowInterval) clearInterval(slideshowInterval);
+
+            slideshowInterval = setInterval(() => {
                 slides[currentSlide].classList.remove('active');
                 currentSlide = (currentSlide + 1) % slides.length;
                 slides[currentSlide].classList.add('active');
             }, 6000); 
         }
+
+        homeBtn.addEventListener('click', () => {
+            if (slideshowInterval) clearInterval(slideshowInterval);
+            memoryMusic.pause();
+            memoryMusic.currentTime = 0;
+
+            memoryScreen.style.opacity = '0';
+            setTimeout(() => {
+                memoryScreen.style.display = 'none';
+                particlesContainer.classList.remove('memory-mode');
+                
+                confirmStep = 1;
+                confirmText.innerText = "Mau lihat?";
+                confirmBtn.innerText = "Iya";
+                confirmBtn.style.opacity = '1';
+
+                bgMusic.play().catch(e => console.log("Audio diputar kembali dicegah."));
+                mainScreen.style.display = 'flex';
+                
+                void mainScreen.offsetWidth;
+                mainScreen.style.opacity = '1';
+            }, 1000);
+        });
     </script>
 </body>
 </html>
